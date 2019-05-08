@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <!--<h1>成功！</h1>-->
+    <!--<div th:text="${hello}"></div>-->
+    <!--<hr/>-->
+    <!--<div th:utext="${hello}"></div>-->
+
+    <!--<hr/>-->
+
+    <!--<h5 th:text="${user}" th:each="user: ${user}"></h5>-->
+    <!--<hr/>-->
+    <!--<h5>-->
+        <!--<span th:text="${user}" th:each="user:${user}">-->
+        <!--</span>-->
+        <!--<br/>-->
+    <!--</h5>-->
+
+    <hr/>
+    <div>
+        <h3 th:each="users:${user}" >
+            <span th:text="${users.id} "></span>
+            <span th:text="${users.name} "></span>
+            <span th:text="${users.password} "></span>
+            <span th:text="${users.salt} "></span>
+            <span th:text="${users.headUrl} "></span>
+        </h3>
+    </div>
+    <p> <a  href="/">Home</a></p>
+    <!--<table>-->
+        <!--<tr><th>根哥</th>-->
+            <!--<th>牛逼</th>-->
+        <!--</tr>-->
+        <!--<tr th:each="users : ${user}">-->
+            <!--<td th:text="${users.id}"></td>-->
+            <!--<td th:text="${users.name}"></td>-->
+            <!--<td th:text="${users.password}"></td>-->
+            <!--<td th:text="${users.salt}"></td>-->
+            <!--<td th:text="${users.headUrl}"></td>-->
+        <!--</tr>-->
+    <!--</table>-->
+</body>
+</html>
