@@ -2,7 +2,6 @@ package com.genge.demo.dao;
 
 import com.genge.demo.model.LoginTicket;
 import org.apache.ibatis.annotations.*;
-import sun.security.krb5.internal.Ticket;
 
 @Mapper
 public interface LoginTicketDAO {
@@ -14,7 +13,7 @@ public interface LoginTicketDAO {
     int addTicket(LoginTicket ticket);
 
     @Select({"select",SELECT_FIELDS,"from",TABLE_NAME,"where ticket=#{ticket}"})
-    Ticket selectByTicket(String ticket);
+    LoginTicket selectByTicket(String ticket);
 
     @Update({"update",TABLE_NAME,"set status=#{status} where ticket=#{ticket}"})
     void updateStatus(@Param("ticket") String ticket,@Param("status") int status);

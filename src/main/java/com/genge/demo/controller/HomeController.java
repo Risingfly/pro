@@ -1,5 +1,6 @@
 package com.genge.demo.controller;
 
+import com.genge.demo.model.HostHolder;
 import com.genge.demo.model.News;
 import com.genge.demo.model.ViewObject;
 import com.genge.demo.service.NewsService;
@@ -10,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,6 +23,8 @@ public class HomeController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private HostHolder hostHolder;
     @RequestMapping(path = {"/","/index"},method = {RequestMethod.GET,RequestMethod.POST})
     public String index(Model model){
         List<News> newsList = newsService.getLatestNews(24,24,3);
