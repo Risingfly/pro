@@ -19,10 +19,25 @@ public class NewsService {
     @Autowired
     private NewsDAO newsDAO;
 
+    /**
+     * 查找最新资讯
+     * @param uerId
+     * @param offset
+     * @param limit
+     * @return
+     */
     public List<News> getLatestNews(int uerId,int offset,int limit){
         return newsDAO.selectByUserIdAndOffset(uerId,offset,limit);
     }
 
+    /**
+     * 添加资讯
+     * @param news
+     * @return
+     */
+    public int addNews(News news){
+        return newsDAO.addNews(news);
+    }
     /***
      *
      * 处理用户上传的图片
@@ -47,4 +62,6 @@ public class NewsService {
         System.out.println("上传路径："+TouTiaoUtil.IMAGE_DIR + fileName);
         return TouTiaoUtil.TOUTIAO_DOMAIN + "image?name=" + fileName;
     }
+
+
 }

@@ -30,7 +30,6 @@ public class TouTiaoWebConfiguration extends WebMvcConfigurerAdapter{
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(myInterceptor);
         registry.addInterceptor(loginRequiredInterceptor).addPathPatterns("/setting*");
         registry.addInterceptor(passportInterceptor);
 

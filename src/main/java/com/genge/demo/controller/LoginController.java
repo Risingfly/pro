@@ -84,6 +84,11 @@ public class LoginController {
         }
     }
 
+    /**
+     * 登出
+     * @param ticket
+     * @return
+     */
     @RequestMapping(path = "/logout/",method = {RequestMethod.GET,RequestMethod.POST})
     public String logout(@CookieValue("ticket")String ticket){
         userService.logout(ticket);
