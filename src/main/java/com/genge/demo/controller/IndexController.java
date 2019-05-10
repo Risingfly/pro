@@ -19,15 +19,12 @@ import java.util.Enumeration;
 public class IndexController {
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(LogAspect.class);
 
-//    @Autowired
-//    private Genge genge;
-//    @Autowired
-//    private LogAspect log;
-//    @RequestMapping("/")
-//    @ResponseBody
-//    public String index(HttpSession session){
-//        return "Hello Spring Boot!" + session.getAttribute("msg") +"<br >"+ genge.say();
-//    }
+
+    @RequestMapping("/setting")
+    @ResponseBody
+    public String setting(){
+        return "setting : OK";
+    }
     @RequestMapping(path = {"/genge","jb/{groupId}/{userId}/{type}"})
     @ResponseBody
     public String genge(@PathVariable("groupId") String Id,

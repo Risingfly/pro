@@ -146,7 +146,8 @@
 
 #if ($pop)
 <script>
-window.loginpop = $!{pop};
+
+window.loginpop = th:text="${pop}";
 </script>
 <script type="text/javascript" src="/scripts/main/site/home.js"></script>
 #end

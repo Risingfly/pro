@@ -10,6 +10,18 @@ import java.util.Map;
 public class TouTiaoUtil {
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
 
+    public static String TOUTIAO_DOMAIN = "http://127.0.0.1:8080/";
+    public static String IMAGE_DIR = "E:\\upload\\";
+    public static String[] IMAGE_FILE_EXT = new String[]{"png","bmp","jpg","jpeg"};
+    public static boolean isFiledAllowed(String fileExt){
+        for (String ext: IMAGE_FILE_EXT) {
+            if (ext.equals(fileExt)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static String getJSONString(int code){
         JSONObject json = new JSONObject();
         json.put("code",code);

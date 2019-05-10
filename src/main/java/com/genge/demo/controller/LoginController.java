@@ -83,4 +83,10 @@ public class LoginController {
             return TouTiaoUtil.getJSONString(1,"注册异常");
         }
     }
+
+    @RequestMapping(path = "/logout/",method = {RequestMethod.GET,RequestMethod.POST})
+    public String logout(@CookieValue("ticket")String ticket){
+        userService.logout(ticket);
+        return "redirect:/";
+    }
 }

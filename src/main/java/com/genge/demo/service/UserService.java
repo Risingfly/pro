@@ -96,6 +96,20 @@ public class UserService {
         return map;
     }
 
+    /**
+     * 登出
+     * @param ticket
+     */
+    public void logout(String ticket){
+        loginTicketDAO.updateStatus(ticket,1);
+    }
+
+    /**
+     *
+     * 添加ticket作为登陆认证并与用户id绑定
+     * @param userId
+     * @return
+     */
     private String addLoginTicket(int userId){
         LoginTicket ticket = new LoginTicket();
         ticket.setUserId(userId);
