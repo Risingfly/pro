@@ -1,23 +1,24 @@
 package com.genge.demo.controller;
 
-import com.genge.demo.model.HostHolder;
-import com.genge.demo.model.News;
+import com.genge.demo.model.*;
+import com.genge.demo.service.CommentService;
 import com.genge.demo.service.NewsService;
+import com.genge.demo.service.UserService;
 import com.genge.demo.util.TouTiaoUtil;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.StreamUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 public class NewsController {
@@ -29,6 +30,72 @@ public class NewsController {
     @Autowired
     HostHolder hostHolder;
 
+    @Autowired
+    CommentService commentService;
+
+    @Autowired
+    UserService userService;
+    /**
+     * 详情首页
+     * @param newsId
+     * @param model
+     * @return
+     */
+    @RequestMapping(path = "/news/{newsId}",method = RequestMethod.GET)
+    public String newsDetail(@PathVariable("newsId") int newsId, Model model){
+        News news = newsService.getById(newsId);
+        if (news != null){
+            List<Comment> comments = commentService.getCommentByEntity(news.getId(), EntityType.ENTITY_NEWS);
+            List<ViewObject> commentVos = new ArrayList<>();
+            for (Comment comment : comments) {
+                ViewObject vo = new ViewObject();
+                vo.set("comment",comment);
+                vo.set("user",userService.getUser(comment.getUserId()));
+                commentVos.add((vo));
+            }
+            model.addAttribute("comments",commentVos);
+        }
+        return "detail";
+    }
+
+    @RequestMapping(value = {"/addComment/"},method = {RequestMethod.POST})
+    public String addComment(@RequestParam("newsId")int newsId,
+                             @RequestParam("content") String content){
+
+        try {
+//          敏感词过滤（待优化）
+            System.out.println("代码进来了");
+            System.out.println("hostHolder.getUser()="+hostHolder.getUser());
+
+            Comment comment = new Comment();
+            System.out.println("comment="+comment);
+            comment.setUserId(hostHolder.getUser().getId());
+            System.out.println("HostHolder"+hostHolder);
+            System.out.println("hostHolder.getUser().getId()"+hostHolder.getUser().getId());
+            comment.setContent(content);
+            System.out.println("content"+content);
+            comment.setEntityId(newsId);
+            System.out.println("newsId"+newsId);
+            comment.setEntityType(EntityType.ENTITY_NEWS);
+            System.out.println("EntityType.ENTITY_NEWS"+EntityType.ENTITY_NEWS);
+            comment.setCreatedDate(new Date());
+            System.out.println("new Date"+new Date());
+            comment.setStatus(0);
+            System.out.println("status"+0);
+            commentService.addComment(comment);
+            System.out.println("comment"+comment);
+//          更新news里的评论数量
+            int count = commentService.getCommentCount(comment.getEntityId(),comment.getEntityType());
+            System.out.println("count="+count);
+            System.out.println("comment.getEntityId()"+comment.getEntityId());
+            newsService.updateCommentCount(count,comment.getEntityId());
+            System.out.println("请求插入新闻成功！");
+//          怎么异步化
+        }catch (Exception e){
+            LOGGER.error("添加评论失败"+e.getMessage());
+        }
+        return "redirect:/news/" + String.valueOf(newsId);
+    }
     /**
      * 上传图片
      * @param file

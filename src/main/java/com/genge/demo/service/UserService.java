@@ -3,6 +3,7 @@ package com.genge.demo.service;
 import com.genge.demo.controller.LoginController;
 import com.genge.demo.dao.LoginTicketDAO;
 import com.genge.demo.dao.UserDAO;
+import com.genge.demo.model.HostHolder;
 import com.genge.demo.model.LoginTicket;
 import com.genge.demo.model.User;
 import com.genge.demo.util.TouTiaoUtil;
@@ -22,6 +23,10 @@ public class UserService {
 
     @Autowired
     private LoginTicketDAO loginTicketDAO;
+
+
+    @Autowired
+    private HostHolder hostHolder;
 
     public User getUser(int id) {
         return userDAO.selectById(id);
@@ -84,6 +89,7 @@ public class UserService {
         }
 
         User user = userDAO.selectByName(username);
+
         if (user == null){
             map.put("msgname","用户名不存在");
             return map;
@@ -93,6 +99,8 @@ public class UserService {
             map.put("msgname","密码不正确");
             return map;
         }
+//        测试，记住user
+        hostHolder.setUser(user);
         return map;
     }
 

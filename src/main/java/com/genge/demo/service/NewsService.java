@@ -19,6 +19,14 @@ public class NewsService {
     @Autowired
     private NewsDAO newsDAO;
 
+
+    public News getById(int newsId){
+        return newsDAO.selectByNewsId(newsId);
+    }
+
+    public int updateCommentCount(int id,int commentCount){
+        return newsDAO.updateCommentCount(id,commentCount);
+    }
     /**
      * 查找最新资讯
      * @param uerId

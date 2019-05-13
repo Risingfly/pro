@@ -74,13 +74,13 @@ public class LoginController {
         try {
             Map<String,Object> map = userService.login(username,password);
             if (map.containsKey("ticket")){
-                return TouTiaoUtil.getJSONString(0,"注册成功");
+                return TouTiaoUtil.getJSONString(0,"登陆成功");
             }else {
                 return TouTiaoUtil.getJSONString(1,map);
             }
         }catch (Exception e){
-            LOGGER.error("注册异常"+e.getMessage());
-            return TouTiaoUtil.getJSONString(1,"注册异常");
+            LOGGER.error("登陆异常"+e.getMessage());
+            return TouTiaoUtil.getJSONString(1,"登陆异常");
         }
     }
 
