@@ -1,9 +1,6 @@
 package com.genge.demo;
 
-import com.genge.demo.dao.CommentDAO;
-import com.genge.demo.dao.LoginTicketDAO;
-import com.genge.demo.dao.NewsDAO;
-import com.genge.demo.dao.UserDAO;
+import com.genge.demo.dao.*;
 import com.genge.demo.model.*;
 import org.junit.Assert;
 import org.junit.Test;
@@ -28,6 +25,21 @@ public class DemoApplicationTests {
 	@Autowired
 	CommentDAO commentDAO;
 
+	@Autowired
+	MessageDAO messageDAO;
+
+	@Test
+	public void contextLoads1(){
+		for (int i = 0; i < 3; i++) {
+			Message msg = new Message();
+			msg.setContent("66"+i);
+			msg.setFromId(i+1);
+			msg.setToId(i + 2);
+			msg.setCreateDate(new Date());
+			msg.setConversationId("begin"+i);
+			messageDAO.addMessage(msg);
+		}
+	}
 
 	@Test
 	public void contextLoads(){

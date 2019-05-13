@@ -58,6 +58,13 @@ public class NewsController {
         return "detail";
     }
 
+    /**
+     *
+     * 用户添加评论
+     * @param newsId
+     * @param content
+     * @return
+     */
     @RequestMapping(value = {"/addComment/"},method = {RequestMethod.POST})
     public String addComment(@RequestParam("newsId")int newsId,
                              @RequestParam("content") String content){
