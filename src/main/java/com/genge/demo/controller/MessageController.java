@@ -1,5 +1,6 @@
 package com.genge.demo.controller;
 
+import com.genge.demo.model.HostHolder;
 import com.genge.demo.model.Message;
 import com.genge.demo.model.User;
 import com.genge.demo.model.ViewObject;
@@ -31,6 +32,9 @@ public class MessageController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    HostHolder hostHolder;
+
     /**
      * 发表消息
      * @param fromId
@@ -51,7 +55,7 @@ public class MessageController {
             msg.setToId(toId);
             msg.setCreateDate(new Date());
             msg.setConversationId(fromId < toId ? String.format("%d_%d",fromId,toId) : String.format("%d_%d",toId,fromId));
-            messageService.addMesssage(msg);
+            messageService.getMessage(msg);
             return TouTiaoUtil.getJSONString(0,"成功");
         }catch (Exception e){
             LOGGER.error("添加消息失败",e.getMessage());
@@ -66,7 +70,7 @@ public class MessageController {
      * @param conversationId
      * @return
      */
-    @RequestMapping(path = "/msg/detail")
+    @RequestMapping(path = "/msg/detail",method = {RequestMethod.POST})
     public String conversationDetail(Model model, @Param("conversationId")String conversationId){
         try {
             List<Message> conversationList = messageService.getConversationDetail(conversationId,0,1);
@@ -87,5 +91,32 @@ public class MessageController {
             LOGGER.error("获取详情页失败"+e.getMessage());
         }
         return "letterDetail";
+    }
+
+    /**
+     * 显示自己和所有其他用户所有的消息对话
+     * @param model
+     * @return
+     */
+    @RequestMapping(path = "/msg/list")
+    public String conversationDetail(Model model){
+        try {
+            int localUserId = hostHolder.getUser().getId();
+            List<ViewObject> conversations = new ArrayList<>();
+            List<Message> conversationList = messageService.getConversationList(localUserId,0,10);
+            for (Message msg: conversationList) {
+                ViewObject vo = new ViewObject();
+                vo.set("conversation",msg);
+                int targetId = msg.getFromId() == localUserId ? msg.getToId() : msg.getFromId();
+                User user = userService.getUser(targetId);
+                vo.set("target",user);
+                vo.set("unread",messageService.getConversationUnReadCount(localUserId,msg.getConversationId()));
+                conversations.add(vo);
+            }
+            model.addAttribute("conversations",conversations);
+        }catch (Exception e){
+            LOGGER.error("获取站内信列表失败"+e.getMessage());
+        }
+        return "letter";
     }
 }

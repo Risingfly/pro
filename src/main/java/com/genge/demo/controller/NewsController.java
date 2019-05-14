@@ -36,7 +36,7 @@ public class NewsController {
     @Autowired
     UserService userService;
     /**
-     * 详情首页
+     * 评论详情首页
      * @param newsId
      * @param model
      * @return
