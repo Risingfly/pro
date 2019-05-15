@@ -1,8 +1,10 @@
 package com.genge.demo.controller;
 
+import com.genge.demo.model.EntityType;
 import com.genge.demo.model.HostHolder;
 import com.genge.demo.model.News;
 import com.genge.demo.model.ViewObject;
+import com.genge.demo.service.LikeService;
 import com.genge.demo.service.NewsService;
 import com.genge.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,9 @@ public class HomeController {
     @Autowired
     private HostHolder hostHolder;
 
+    @Autowired
+    private LikeService likeService;
+
     @RequestMapping(value = {"/user/{userId}"},method = {RequestMethod.GET,RequestMethod.POST})
     public String userIndex(Model model, @PathVariable("userId") int userId,
                             @RequestParam(value = "pop",defaultValue = "0")int pop){
@@ -48,5 +53,22 @@ public class HomeController {
         model.addAttribute("vos",vos);
         model.addAttribute("today",new Date());
         return "home";
+    }
+
+    private List<ViewObject> getNews(int userId,int offset,int limit){
+        List<News> newsList = newsService.getLatestNews(userId,offset,limit);
+        int localUserId = hostHolder.getUser() != null ? hostHolder.getUser().getId() : 0;
+        List<ViewObject> vos = new ArrayList<>();
+        for (News news: newsList) {
+            ViewObject vo = new ViewObject();
+            vo.set("news",news);
+            vo.set("user",userService.getUser(news.getUserId()));
+            if (localUserId != 0){
+                vo.set("like",likeService.getLikeStatus(localUserId, EntityType.ENTITY_NEWS,news.getId()));
+            }else {
+                vo.set("like",0);
+            }
+        }
+        return vos;
     }
 }
