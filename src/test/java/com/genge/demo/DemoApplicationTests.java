@@ -2,6 +2,7 @@ package com.genge.demo;
 
 import com.genge.demo.dao.*;
 import com.genge.demo.model.*;
+import com.genge.demo.util.JedisAdapter;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,6 +29,20 @@ public class DemoApplicationTests {
 	@Autowired
 	MessageDAO messageDAO;
 
+	@Autowired
+	JedisAdapter jedisAdapter;
+	@Test
+	public void testObject(){
+		User user = new User();
+		user.setHeadUrl("http://image.genge.nb.com");
+		user.setName("user1");
+		user.setPassword("pwd");
+		user.setSalt("salt");
+		jedisAdapter.setObject("user1xx",user);
+		User user1 = jedisAdapter.getObject("user1xx",User.class);
+		System.out.println("相等="+(user == user1));
+		System.out.println(user1);
+	}
 	@Test
 	public void contextLoads1(){
 		for (int i = 0; i < 3; i++) {

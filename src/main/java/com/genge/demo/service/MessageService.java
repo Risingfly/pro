@@ -28,4 +28,7 @@ public class MessageService {
     public int getConversationUnReadCount(int userId,String conversationId){
         return messageDAO.getConversationUnReadCount(userId,conversationId);
     }
+    public int addMessage(Message message) {
+        return messageDAO.addMessage(message);
+    }
 }

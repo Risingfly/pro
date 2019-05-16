@@ -1,5 +1,8 @@
 package com.genge.demo.controller;
 
+import com.genge.demo.async.EventModel;
+import com.genge.demo.async.EventProducer;
+import com.genge.demo.async.EventType;
 import com.genge.demo.service.UserService;
 import com.genge.demo.util.TouTiaoUtil;
 import org.slf4j.LoggerFactory;
@@ -19,6 +22,9 @@ public class LoginController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    EventProducer eventProducer;
 
     /**
      * 注册
@@ -69,11 +75,21 @@ public class LoginController {
     @RequestMapping(path = "/login/",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
     public String login(Model model, @RequestParam("username") String username,@RequestParam("password")String password,
-                      @RequestParam(value = "rember",defaultValue="0") int remember){
+                      @RequestParam(value = "rember",defaultValue="0") int remember,
+                        HttpServletResponse response){
 
         try {
             Map<String,Object> map = userService.login(username,password);
             if (map.containsKey("ticket")){
+                Cookie cookie = new Cookie("ticket",map.get("ticket").toString());
+//              全路径有效
+                cookie.setPath("/");
+//              若设置记得，则加长有效期
+                if (remember > 0){
+                    cookie.setMaxAge(3600 * 24 * 5);
+                }
+                response.addCookie(cookie);
+                eventProducer.fireEvent(new EventModel(EventType.LOGIN).setActorId((int)map.get("userId")));
                 return TouTiaoUtil.getJSONString(0,"登陆成功");
             }else {
                 return TouTiaoUtil.getJSONString(1,map);
