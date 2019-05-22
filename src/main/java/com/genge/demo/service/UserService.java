@@ -64,6 +64,7 @@ public class UserService {
         userDAO.addUser(user);
 
 //        注册完默认直接登陆
+        //传入ticket，也就是登录成功
         String ticket = addLoginTicket(user.getId());
         map.put("ticket",ticket);
         return map;
@@ -100,7 +101,10 @@ public class UserService {
             return map;
         }
 //        测试，记住user
-        hostHolder.setUser(user);
+//        hostHolder.setUser(user);
+        //传入ticket，也就是登录成功
+        String ticket = addLoginTicket(user.getId());
+        map.put("ticket",ticket);
         return map;
     }
 

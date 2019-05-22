@@ -19,6 +19,6 @@ public interface NewsDAO {
     @Select({"select",SELECT_FIELDS,"from",TABLE_NAME,"where id=#{newsId}"})
     News selectByNewsId(@Param("newsId") int newsId);
 
-    @Update({"update",TABLE_NAME,"set id=#{id} and comment_count=#{commentCount}"})
-    int updateCommentCount(@Param("id")int id,@Param("comment_count")int commentCount);
+    @Update({"update ", TABLE_NAME, " set comment_count = #{commentCount} where id=#{id}"})
+    int updateCommentCount(@Param("id")int id,@Param("commentCount")int commentCount);
 }

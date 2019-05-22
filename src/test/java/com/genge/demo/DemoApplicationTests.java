@@ -3,8 +3,7 @@ package com.genge.demo;
 import com.genge.demo.dao.*;
 import com.genge.demo.model.*;
 import com.genge.demo.util.JedisAdapter;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,6 +30,37 @@ public class DemoApplicationTests {
 
 	@Autowired
 	JedisAdapter jedisAdapter;
+
+	@Test
+	public void testLoginDAO(){
+		String ticket = "cb6e2c6c0f5e4468891899de82a284a2";
+		LoginTicket loginTicket = loginTicketDAO.selectByTicket(ticket);
+		System.out.println("userId="+loginTicket.getUserId()+"id="+
+		loginTicket.getId()+"expired="+loginTicket.getExpired());
+//		LoginTicket ticket1 = new LoginTicket();
+//		ticket1.setUserId(100);
+//		ticket1.setTicket("0");
+//		ticket1.setStatus(0);
+//		ticket1.setId(99);
+//		ticket1.setExpired(new Date());
+//		loginTicketDAO.addTicket(ticket1);
+		Assert.assertNotNull(loginTicket);
+	}
+	@Before
+	public void beforeTest(){
+		System.out.println("before Test");
+	}
+	@BeforeClass
+	public static void beforeClass(){
+		System.out.println("beforeClass");
+	}
+	@After
+	public void afterTest(){
+		System.out.println("after Test");
+	}
+	public static void afterClass(){
+		System.out.println("afterClass");
+	}
 	@Test
 	public void testObject(){
 		User user = new User();
@@ -42,6 +72,10 @@ public class DemoApplicationTests {
 		User user1 = jedisAdapter.getObject("user1xx",User.class);
 		System.out.println("相等="+(user == user1));
 		System.out.println(user1);
+	}
+	@Test(expected = IllegalArgumentException.class)
+	public void testException(){
+		throw new IllegalArgumentException("参数异常");
 	}
 	@Test
 	public void contextLoads1(){

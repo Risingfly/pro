@@ -71,7 +71,7 @@ public class MessageController {
      * @return
      */
     @RequestMapping(path = "/msg/detail",method = {RequestMethod.POST})
-    public String conversationDetail(Model model, @Param("conversationId")String conversationId){
+    public String conversationDetail(Model model, @RequestParam("conversationId")String conversationId){
         try {
             List<Message> conversationList = messageService.getConversationDetail(conversationId,0,1);
             List<ViewObject> messages = new ArrayList<>();

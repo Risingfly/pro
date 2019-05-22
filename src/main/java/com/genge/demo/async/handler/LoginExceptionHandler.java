@@ -5,10 +5,8 @@ import com.genge.demo.async.EventModel;
 import com.genge.demo.async.EventType;
 import com.genge.demo.model.Message;
 import com.genge.demo.service.MessageService;
-import com.genge.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import sun.misc.resources.Messages;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -28,7 +26,7 @@ public class LoginExceptionHandler implements EventHandler {
         message.setFromId(3);
         message.setCreateDate(new Date());
         messageService.addMessage(message);
-        
+
     }
 
     @Override

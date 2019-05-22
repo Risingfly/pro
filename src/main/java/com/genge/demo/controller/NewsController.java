@@ -65,7 +65,7 @@ public class NewsController {
      * @param content
      * @return
      */
-    @RequestMapping(value = {"/addComment/"},method = {RequestMethod.POST})
+    @RequestMapping(path = {"/addComment/"},method = {RequestMethod.POST})
     public String addComment(@RequestParam("newsId")int newsId,
                              @RequestParam("content") String content){
 
@@ -75,22 +75,13 @@ public class NewsController {
             System.out.println("hostHolder.getUser()="+hostHolder.getUser());
 
             Comment comment = new Comment();
-            System.out.println("comment="+comment);
             comment.setUserId(hostHolder.getUser().getId());
-            System.out.println("HostHolder"+hostHolder);
-            System.out.println("hostHolder.getUser().getId()"+hostHolder.getUser().getId());
             comment.setContent(content);
-            System.out.println("content"+content);
             comment.setEntityId(newsId);
-            System.out.println("newsId"+newsId);
             comment.setEntityType(EntityType.ENTITY_NEWS);
-            System.out.println("EntityType.ENTITY_NEWS"+EntityType.ENTITY_NEWS);
             comment.setCreatedDate(new Date());
-            System.out.println("new Date"+new Date());
             comment.setStatus(0);
-            System.out.println("status"+0);
             commentService.addComment(comment);
-            System.out.println("comment"+comment);
 //          更新news里的评论数量
             int count = commentService.getCommentCount(comment.getEntityId(),comment.getEntityType());
             System.out.println("count="+count);

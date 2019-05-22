@@ -82,6 +82,7 @@ public class LoginController {
             Map<String,Object> map = userService.login(username,password);
             if (map.containsKey("ticket")){
                 Cookie cookie = new Cookie("ticket",map.get("ticket").toString());
+                System.out.println("ticket="+map.get("ticket").toString());
 //              全路径有效
                 cookie.setPath("/");
 //              若设置记得，则加长有效期
@@ -89,12 +90,13 @@ public class LoginController {
                     cookie.setMaxAge(3600 * 24 * 5);
                 }
                 response.addCookie(cookie);
-                eventProducer.fireEvent(new EventModel(EventType.LOGIN).setActorId((int)map.get("userId")));
+//                eventProducer.fireEvent(new EventModel(EventType.LOGIN).setActorId((int)map.get("userId")));
                 return TouTiaoUtil.getJSONString(0,"登陆成功");
             }else {
                 return TouTiaoUtil.getJSONString(1,map);
             }
         }catch (Exception e){
+            e.printStackTrace();
             LOGGER.error("登陆异常"+e.getMessage());
             return TouTiaoUtil.getJSONString(1,"登陆异常");
         }
