@@ -3,6 +3,7 @@ package com.genge.demo.controller;
 import com.genge.demo.async.EventModel;
 import com.genge.demo.async.EventProducer;
 import com.genge.demo.async.EventType;
+import com.genge.demo.dao.LoginTicketDAO;
 import com.genge.demo.service.UserService;
 import com.genge.demo.util.TouTiaoUtil;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,8 @@ public class LoginController {
     @Autowired
     EventProducer eventProducer;
 
+    @Autowired
+    LoginTicketDAO loginTicketDAO;
     /**
      * 注册
      * @param model
@@ -90,7 +93,7 @@ public class LoginController {
                     cookie.setMaxAge(3600 * 24 * 5);
                 }
                 response.addCookie(cookie);
-//                eventProducer.fireEvent(new EventModel(EventType.LOGIN).setActorId((int)map.get("userId")));
+                eventProducer.fireEvent(new EventModel(EventType.LOGIN).setActorId(loginTicketDAO.selectByTicket(map.get("ticket").toString()).getUserId()));
                 return TouTiaoUtil.getJSONString(0,"登陆成功");
             }else {
                 return TouTiaoUtil.getJSONString(1,map);

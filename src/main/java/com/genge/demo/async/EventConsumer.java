@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.*;
 
 /**
  *取出事件队列中的事件，并调用相应的handler进行处理
@@ -45,7 +46,32 @@ public class EventConsumer implements InitializingBean,ApplicationContextAware{
             }
         }
 
-        Thread thread = new Thread(new Runnable() {
+//        Thread thread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                while (true){
+//                    String key = RedisKeyUtil.getEventQueueKey();
+//                    List<String> events = jedisAdapter.brpop(0,key);
+//                    for (String message: events) {
+//                        if (message.equals(key)){
+//                            continue;
+//                        }
+//                        EventModel eventModel = JSON.parseObject(message,EventModel.class);
+//                        if (!config.containsKey(eventModel.getEventType())){
+//                            LOGGER.error("不能识别的事件");
+//                            continue;
+//                        }
+//                        for (EventHandler handler : config.get(eventModel.getEventType())) {
+//                            handler.doHandler(eventModel);
+//                        }
+//                    }
+//                }
+//            }
+//        });
+        ExecutorService poolExecutor = Executors.newSingleThreadExecutor();
+        ThreadPoolExecutor pool = new ThreadPoolExecutor(5, 10, 10, TimeUnit.MILLISECONDS,
+                new ArrayBlockingQueue<Runnable>(10));
+        pool.execute(new Runnable() {
             @Override
             public void run() {
                 while (true){
@@ -67,7 +93,30 @@ public class EventConsumer implements InitializingBean,ApplicationContextAware{
                 }
             }
         });
-        thread.start();
+//        poolExecutor.execute(new Runnable() {
+//            @Override
+//            public void run() {
+//                while (true){
+//                    String key = RedisKeyUtil.getEventQueueKey();
+//                    List<String> events = jedisAdapter.brpop(0,key);
+//                    for (String message: events) {
+//                        if (message.equals(key)){
+//                            continue;
+//                        }
+//                        EventModel eventModel = JSON.parseObject(message,EventModel.class);
+//                        if (!config.containsKey(eventModel.getEventType())){
+//                            LOGGER.error("不能识别的事件");
+//                            continue;
+//                        }
+//                        for (EventHandler handler : config.get(eventModel.getEventType())) {
+//                            handler.doHandler(eventModel);
+//                        }
+//                    }
+//                }
+//            }
+//        });
+//        thread.setName("我是处理异步的线程^^");
+//        thread.start();
 
     }
 

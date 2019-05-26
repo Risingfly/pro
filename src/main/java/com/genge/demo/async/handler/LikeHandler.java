@@ -24,6 +24,7 @@ public class LikeHandler implements EventHandler {
 
     @Override
     public void doHandler(EventModel model) {
+        System.out.println(Thread.currentThread().getName());
         Message message = new Message();
         message.setFromId(3);
         message.setToId(model.getActorId());
@@ -31,6 +32,7 @@ public class LikeHandler implements EventHandler {
         message.setContent("用户"+user.getName()+"赞了你的资讯，http://127.0.0.1:8080/news"
         +model.getEntityId());
         message.setCreateDate(new Date());
+        message.setConversationId("点赞通知大兄弟！有人喜欢你^^");
         messageService.addMessage(message);
         System.out.println("Liked");
     }
